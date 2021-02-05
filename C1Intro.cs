@@ -132,32 +132,33 @@ namespace AlgorithmDesignManual
         Dictionary<int,String> candidates = new Dictionary<int,String>();
         candidates.Add(1,"John Doe");
         candidates.Add(2,"Jane Smith");
-        candidates.Add(3,"Sirhan Sirhan");
-        candidates.Add(4,"Allan Border");
-        int candidatesCount = candidates.Count();
+        candidates.Add(3,"Sirhan Sirhan");        
+        
         votesList.Add(new int[]{1, 2 ,3});
         votesList.Add(new int[]{2, 1 ,3});
         votesList.Add(new int[]{2 ,3, 1});
         votesList.Add(new int[]{1 ,2 ,3});
         votesList.Add(new int[]{3, 1 ,2});
-        votesList.Add(new int[]{4, 2 ,2});
+
+        //candidates.Add(4,"Allan Border");
+       // votesList.Add(new int[]{4, 2 ,2});
     
  
-            int[] wIndex=anyWinner(votesList, candidates, votesList.Count);
-             
-            foreach(int w in wIndex)
-            {
-                Print( candidates[w] );
-            }
+        int[] wIndex=anyWinner(votesList, candidates);
+            
+        foreach(int w in wIndex)
+        {
+            Print( candidates[w] );
+        }
         
     }       
          
 
 
-    private int[] anyWinner(List<int[]> votesList,Dictionary<int,String> candidates, int voters,Dictionary<int,int> firstVotesCount=null)
+    private int[] anyWinner(List<int[]> votesList,Dictionary<int,String> candidates,Dictionary<int,int> firstVotesCount=null)
     {       
         int candidatesCount = candidates.Count();       
-              
+        int voters = votesList.Count;
         //Keep track of a candidate's first choice vote count
         if(firstVotesCount==null)
         {
@@ -171,7 +172,7 @@ namespace AlgorithmDesignManual
             {        
                 int candidateId= votes[0]; //First choice candidates index
                 firstVotesCount[candidateId]++;   
-                //if any candidates first choice vote count is more than 50% then return as winner
+              
                               
             }   
         } 
@@ -185,6 +186,7 @@ namespace AlgorithmDesignManual
             {
                     count++;
             }
+              //if any candidates first choice vote count is more than 50% then return as winner
             if((double)firstVoteCount.Value/(double)voters >0.5)        
             {                  
                 return new int[]{firstVoteCount.Key};
@@ -195,10 +197,7 @@ namespace AlgorithmDesignManual
         {
             return  new int[]{candidates.ElementAt(0).Key,candidates.ElementAt(1).Key};
         }
-            
     
-
-        votesList.RemoveAll(vl=>vl==null);           
         
         //Now remove the candidates who get the least first choice votes 
         //Move the second choice selection of voters who voted for this candiadate to the remaining candidates
@@ -213,12 +212,12 @@ namespace AlgorithmDesignManual
                 for (int k=0;k<votesList.Count();k++)
                 {
                     //Voters who voted for the  min first Vote Candidate first choice
-                    if((votesList[k] !=null) && (votesList[k][0]==minfirstVoteCandidateId))
+                    if((votesList[k]!=null) && (votesList[k][0]==minfirstVoteCandidateId))
                     {
                         //next available candidate preference
                         for(int m=1;m<votesList[k].Count();m++)
                         {
-                            //if any of the next preferences are still in the list
+                            //if any of the next preference candidates are still in the list
                             if(candidates.ContainsKey(votesList[k][m]))
                             {
                                 firstVotesCount[votesList[k][m]]++;
@@ -233,9 +232,10 @@ namespace AlgorithmDesignManual
                          
                     }
                 }
+                //first vote count for Candidates who got min votes
                 firstVotesCount[firstVoteCount.Key]=-1;              
         }
-        return anyWinner(votesList, candidates, voters,firstVotesCount);                
+        return anyWinner(votesList, candidates, firstVotesCount);                
     }
     
     
