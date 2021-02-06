@@ -135,13 +135,15 @@ namespace AlgorithmDesignManual
         candidates.Add(3,"Sirhan Sirhan");        
         
         votesList.Add(new int[]{1, 2 ,3});
+        votesList.Add(new int[]{1 ,2 ,3});
         votesList.Add(new int[]{2, 1 ,3});
         votesList.Add(new int[]{2 ,3, 1});
-        votesList.Add(new int[]{1 ,2 ,3});
+       
         votesList.Add(new int[]{3, 1 ,2});
 
-        //candidates.Add(4,"Allan Border");
-       // votesList.Add(new int[]{4, 2 ,2});
+        candidates.Add(4,"Allan Border");
+        votesList.Add(new int[]{4, 1,2});
+        votesList.Add(new int[]{4, 2 ,1});
     
  
         int[] wIndex=anyWinner(votesList, candidates);
@@ -176,9 +178,14 @@ namespace AlgorithmDesignManual
                               
             }   
         } 
+        //Only one candidate
+        if(candidatesCount==1)
+        {
+            return  new int[]{candidates.ElementAt(0).Key};
+        }
         
          //If only 2 candidates are left and  get exactly the same amount of votes - the it is a tie and return both
-
+        
         int count =0;
         foreach (var firstVoteCount in firstVotesCount.Where(fvc =>fvc.Value!=-1))
         { 
@@ -200,41 +207,49 @@ namespace AlgorithmDesignManual
     
         
         //Now remove the candidates who get the least first choice votes 
-        //Move the second choice selection of voters who voted for this candiadate to the remaining candidates
-        int minFirstVotes = firstVotesCount.Values.Min() ;
         
+        int minFirstVotes = firstVotesCount.Values.Min();
+        List<int> removedCandidates = new List<int>();
         foreach (var firstVoteCount in firstVotesCount.Where(fvc =>fvc.Value==minFirstVotes))
-        {  
-
-                int  minfirstVoteCandidateId = firstVoteCount.Key;
-                //Remove this candidate from the candidate's list
-                candidates.Remove(minfirstVoteCandidateId);
-                for (int k=0;k<votesList.Count();k++)
-                {
-                    //Voters who voted for the  min first Vote Candidate first choice
-                    if((votesList[k]!=null) && (votesList[k][0]==minfirstVoteCandidateId))
-                    {
-                        //next available candidate preference
-                        for(int m=1;m<votesList[k].Count();m++)
-                        {
-                            //if any of the next preference candidates are still in the list
-                            if(candidates.ContainsKey(votesList[k][m]))
-                            {
-                                firstVotesCount[votesList[k][m]]++;
-                                //the voter's choice matter no more
-                                //as the first choice candidate has been removed
-                                votesList[k] =null; 
-                                break;
-
-                            }
-                            
-                        }
-                         
-                    }
-                }
-                //first vote count for Candidates who got min votes
-                firstVotesCount[firstVoteCount.Key]=-1;              
+        {
+            removedCandidates.Add(firstVoteCount.Key);
+            candidates.Remove(firstVoteCount.Key);
         }
+        //REMOVE first vote count for Candidates who got min votes
+        foreach(var K in removedCandidates)
+        {
+            firstVotesCount.Remove(K);
+        }
+        //Move the next choice selection of voters who voted for this candiadate to the remaining candidates
+        foreach (var removedCandidate in removedCandidates)
+        {  
+                 
+            for (int k=0;k<votesList.Count();k++)
+            {
+                //Voters who voted for the  min first Vote Candidate first choice
+                if((votesList[k]!=null) && (votesList[k][0]==removedCandidate))
+                {
+                    //next available candidate preference
+                    for(int m=1;m<votesList[k].Count();m++)
+                    {
+                        int nextPreference = votesList[k][m];
+                        //if any of the next preference candidates are still in the list
+                        if(candidates.ContainsKey(nextPreference) && firstVotesCount.ContainsKey(nextPreference))
+                        {
+ 
+                            firstVotesCount[nextPreference]++;                            
+                            break;                           
+
+                        }                        
+                    }                   
+                        
+                }
+            }
+                
+                              
+        }
+       
+        
         return anyWinner(votesList, candidates, firstVotesCount);                
     }
     
