@@ -19,7 +19,8 @@ namespace AlgorithmDesignManual
             Print(maxthreenplusone(1000,900));
             */
            // Print(thetrip(new double[] {15.00,15.01,3.00,3.01} )) ;
-           australianVoting();
+           //australianVoting();
+           Print(division(2200,5));
         }
 
     //“The 3n + 1 Problem” – Programming Challenges 110101, UVA Judge 100.
@@ -153,10 +154,52 @@ namespace AlgorithmDesignManual
             Print( candidates[w] );
         }
         
-    }       
+    } 
+
+    private int division(int n, int d)      
+    {
+
+        if((n==0)|(d==0))
+        {
+            return 0;
+        }
+        int multiple=1;
+       
+        if(n<0 && d>0)
+        {
+            multiple =-1;
+        }
+
+         if(n>0 && d<0)
+        {
+            multiple =-1;
+        }
+        if(n<0)
+        {
+            n= -n;
+        }
+        if(d<0)
+        {
+            d= -d;
+        }
+
+        return  multiple * divisonrecursion(n,d);
+         
+    }
          
 
+    private int divisonrecursion(int n, int d, int count=0)
+    {
+       
+        if((n<d))
+        {
+            
+            return count;
+        }
 
+        return divisonrecursion(n-d, d,count+1);        
+
+    }
     private int[] anyWinner(List<int[]> votesList,Dictionary<int,String> candidates,Dictionary<int,int> firstVotesCount=null)
     {       
         int candidatesCount = candidates.Count();       
