@@ -9,31 +9,146 @@ namespace AlgorithmDesignManual
     {
         public void Run()
         {
-            /* SingleLinkedList l = buildll();
-
+            /* #region Linked List*/
+             /*SingleLinkedList l = buildll();
              ReveresLL( l );
              Display( l);
              Node m  = middlell(l);
              Print(m.data);
              l.Print( searchllR( l.head,  8));
              Delete ( l, 9);
-             Display( l);
-             */
-            Print(checkloopll());
+             Display( l);             
+            Print(checkloopll());*/
+            /* #endregion*/
 
+            /* #region Stack and Queue */
             /*Print(checkparanthesis("((())())()"));
             Print(checkparanthesis(")()("));
             Print(checkparanthesis("())"));
-            Print(checkparanthesis(")"));*/
-            //Print(reverseline("my name is jill"));
+            Print(checkparanthesis(")"));
+            Print(reverseline("my name is jill"));*/
+              /* #endregion */
+            /* #region BST*/
+            BinaryTree tree = new BinaryTree();
+            //tree.root = sortedArrayToBST(new int[] {1,2,3});
+            //DisplayInOrder(tree.root);
 
-
+            tree.root = InsertBSTNodes(new int[] {1,2,3,4,5,6}) ;
+            DisplayInOrder(tree.root);
+           // Print(SearchBST(tree.root,1).data);
+            /* #endregion*/
         }
 
     /*  #region BST */
         
+        private BinaryTreeNode SearchBST(BinaryTreeNode node, int x)
+        {
+                if(node == null)
+                {
+                    return null;
+                }
+                if(node.data==x)
+                {
+                    return node;
+                }
 
-        
+                if(x<node.data)
+                {
+                    return (SearchBST(node.left, x));
+                }
+                else
+                {
+                     return (SearchBST(node.right, x));
+                }
+        }
+
+       private BinaryTreeNode InsertBSTNodes( int[] arr)       
+       {
+           BinaryTreeNode root =null;
+           root = InsertBSTNode(root, arr[0]);
+           for(int i=1;i<arr.Length;i++)
+           {
+               InsertBSTNode(root, arr[i]);
+           }
+           return root;
+
+       }
+
+       private BinaryTreeNode InsertBSTNode(BinaryTreeNode root,int a)       
+       {
+           BinaryTreeNode x= root;
+           BinaryTreeNode y = null; //Record parent
+
+           while (x!=null)
+           {
+               y = x;
+               if(a<y.data)
+               {
+                   x= x.left;
+               }
+               else
+               {
+                   x= x.right;
+               }
+
+           }
+           BinaryTreeNode n = new BinaryTreeNode(a);
+
+           if(y==null)//empty root node
+           {
+               y= n;
+           }
+           else if(a<y.data)
+           {
+               y.left=n;
+           }
+           else
+           {
+               y.right = n;
+           }
+           return y;
+           
+       }
+
+        private  BinaryTreeNode sortedArrayToBST(int[] arr, int? start=null, int? end=null) 
+        { 
+            if(!start.HasValue)
+            {
+                start=0;
+            }
+
+            if(!end.HasValue)
+            {
+                end = arr.Length-1;
+            }          
+
+            if(start>end)
+            {
+                return null;
+            }
+            
+            int mid = start.Value + (end.Value-start.Value)/2;
+            BinaryTreeNode t = new BinaryTreeNode(arr[mid]);
+
+            //left node;
+            t.left = sortedArrayToBST(arr,start,mid-1);
+            t.right = sortedArrayToBST(arr,mid+1,end);
+
+            return t;
+
+        }
+        internal void DisplayInOrder(BinaryTreeNode node)
+        {
+            
+            if (node!=null)
+            {
+                DisplayInOrder(node.left);
+                Console.Write(node.data);
+                DisplayInOrder(node.right);
+            }
+        }
+
+
 
     /*  #endregion  */
 
@@ -293,6 +408,31 @@ namespace AlgorithmDesignManual
         /* #endregion */
 
     }
+
+
+    internal class BinaryTree:Helper
+    {
+        internal BinaryTreeNode root;
+        
+    }
+    internal class BinaryTreeNode
+    {   
+        internal int data;
+        internal BinaryTreeNode parent;
+        internal BinaryTreeNode right;
+        internal BinaryTreeNode left;
+
+        public  BinaryTreeNode()
+        {
+        }
+        public  BinaryTreeNode(int data)
+        {
+            this.data= data;
+        }
+
+
+    }
+
     internal class SingleLinkedList
     {
         internal Node head;

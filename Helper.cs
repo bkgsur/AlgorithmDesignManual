@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace AlgorithmDesignManual
 {
     public class Helper
@@ -9,6 +10,11 @@ namespace AlgorithmDesignManual
         {
             Console.WriteLine(s);
             Console.WriteLine("====================");
+        }
+
+         protected void Print<T>(T[] s )
+        {
+             Print(s.ToList());
         }
 
         protected void Print<T>(List<T> s)
@@ -30,17 +36,19 @@ namespace AlgorithmDesignManual
                 s[i]=s[j];
                 s[j]=temp;
         }
+        protected void Swap<T>(T[] s, int i,int j)
+        {
+                T temp  = s[i];
+                s[i]=s[j];
+                s[j]=temp;
+        }
 
-        protected List<int> randomnumberslist(int n)
+        protected IEnumerable<int> randomnumberslistUnSorted(int n, int start=0)
         {
             var rand = new Random();
-            var rtnlist = new List<int>();
-            for (int i = 0; i <n; i++)
-            {
-                rtnlist.Add(rand.Next(n));
-            }
-            return rtnlist;
-        }
+            return Enumerable.Range(start,n).OrderBy(e=>rand.Next());
+             
+        }      
     }
 
 }
