@@ -11,7 +11,7 @@ namespace AlgorithmDesignManual
            //run= new C2AlgorithmAnalysis();
           // run= new C3DataStructures();
            //run= new C4SortSearch();
-           run = new C8DynamicProgramming();
+           run = new DP.C8DynamicProgramming();
            run.Run();
         }
     }

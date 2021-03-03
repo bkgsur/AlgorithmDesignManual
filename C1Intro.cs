@@ -20,7 +20,15 @@ namespace AlgorithmDesignManual
             */
            // Print(thetrip(new double[] {15.00,15.01,3.00,3.01} )) ;
            //australianVoting();
-           Print(division(2200,5));
+           //Print(division(2200,5));
+           Reverse(new char[] {'a','b','c','d'});
+        }
+
+        private void Reverse(char[] s, int i=0)
+        {
+            if(i>=s.Length) return;
+            Reverse(s,i+1);
+            Console.Write(s[i]);
         }
 
     //“The 3n + 1 Problem” – Programming Challenges 110101, UVA Judge 100.
